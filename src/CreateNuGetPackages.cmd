@@ -9,7 +9,7 @@ setlocal
 	if [%1]==[Release] set package_project=1
 	if defined package_project (
 		echo Packiging %project% ...
-		nuget restore
+		nuget restore -NoCache
 		nuget pack .\PPWCode.Vernacular.Wcf.I\%project%.csproj -Build -Properties "Configuration=%1"
 	)
 	
