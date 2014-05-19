@@ -17,6 +17,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         private const string HostKey = "Host";
         private const string PortKey = "Port";
         private const string ServicePrincipalNameKey = "ServicePrincipalName";
+        private const string TransactionFlowKey = "TransactionFlow";
         private const string InactivityTimeoutKey = "InactivityTimeout";
         private const string SendTimeoutKey = "SendTimeout";
         private const string ReceiveTimeoutKey = "ReceiveTimeout";
@@ -216,6 +217,16 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get { return GetAppSetting(ServicePrincipalNameKey, (string)null); }
         }
 
+        private bool DefaultTransactionFlow
+        {
+            get { return ConfigHelper.GetAppSetting(TransactionFlowKey, false); }
+        }
+
+        private bool TransactionFlow
+        {
+            get { return GetAppSetting(TransactionFlowKey, DefaultTransactionFlow); }
+        }
+
         private string BaseAddress
         {
             get { return string.Format(@"net.tcp://{0}:{1}/{2}", Host, Port, Namespace); }
@@ -272,7 +283,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                         ReceiveTimeout = ReceiveTimeout,
                         OpenTimeout = OpenTimeout,
                         CloseTimeout = CloseTimeout,
-                        TransactionFlow = true,
+                        TransactionFlow = TransactionFlow,
                         MaxBufferSize = MaxBufferSize,
                         MaxBufferPoolSize = MaxBufferPoolSize,
                         MaxReceivedMessageSize = MaxReceivedMessageSize,
