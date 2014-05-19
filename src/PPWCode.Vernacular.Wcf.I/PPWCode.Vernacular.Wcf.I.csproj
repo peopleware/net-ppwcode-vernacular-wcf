@@ -146,6 +146,8 @@
     <Compile Include="..\Solution Items\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Behaviors\AllowedImpersonationLevelAuthorization.cs" />
+    <Compile Include="Behaviors\PrincipalPermissionModeAuthorization.cs" />
     <Compile Include="Config\NetTcpConfig.cs" />
     <Compile Include="ErrorHandlers\ExceptionLogbookEntry.cs" />
     <Compile Include="ErrorHandlers\ExceptionMarshallingErrorHandler.cs" />
