@@ -153,6 +153,7 @@
     <Compile Include="ErrorHandlers\ExceptionMarshallingErrorHandler.cs" />
     <Compile Include="ErrorHandlers\LogErrorHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WcfDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
