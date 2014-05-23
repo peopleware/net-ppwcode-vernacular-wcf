@@ -18,7 +18,6 @@
         <dependencies>
             <dependency id="Castle.Core" version="[3.2.2,)" />
             <dependency id="Castle.WcfIntegrationFacility" version="[3.2.0,)" />
-            <dependency id="NHibernate" version="[3.3.3,)" />
             <dependency id="PPWCode.Util.OddsAndEnds.II" version="[1,2)" />
             <dependency id="PPWCode.Vernacular.Exceptions.II" version="[1,2)" />
         </dependencies>
