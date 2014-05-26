@@ -148,6 +148,8 @@
     </Compile>
     <Compile Include="Behaviors\AllowedImpersonationLevelAuthorization.cs" />
     <Compile Include="Behaviors\PrincipalPermissionModeAuthorization.cs" />
+    <Compile Include="Config\NetConfigBase.cs" />
+    <Compile Include="Config\NetMsmqConfig.cs" />
     <Compile Include="Config\NetTcpConfig.cs" />
     <Compile Include="ErrorHandlers\ExceptionLogbookEntry.cs" />
     <Compile Include="ErrorHandlers\ExceptionMarshallingErrorHandler.cs" />

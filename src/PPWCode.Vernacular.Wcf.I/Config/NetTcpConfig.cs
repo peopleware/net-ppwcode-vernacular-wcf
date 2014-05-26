@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Net.Security;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -11,51 +10,20 @@ using PPWCode.Util.OddsAndEnds.II.ConfigHelper;
 
 namespace PPWCode.Vernacular.Wcf.I.Config
 {
-    public sealed class NetTcpConfig<T>
+    public class NetTcpConfig<T> : NetConfigBase<T>
         where T : class
     {
-        private const string HostKey = "Host";
-        private const string PortKey = "Port";
-        private const string ServicePrincipalNameKey = "ServicePrincipalName";
-        private const string TransactionFlowKey = "TransactionFlow";
-        private const string InactivityTimeoutKey = "InactivityTimeout";
-        private const string SendTimeoutKey = "SendTimeout";
-        private const string ReceiveTimeoutKey = "ReceiveTimeout";
-        private const string OpenTimeoutKey = "OpenTimeout";
-        private const string CloseTimeoutKey = "CloseTimeout";
-        private const string MaxBufferSizeKey = "MaxBufferSize";
-        private const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
-        private const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
-        private const string MaxArrayLengthKey = "MaxArrayLength";
-        private const string MaxDepthKey = "MaxDepth";
-        private const string MaxStringContentLengthKey = "MaxStringContentLength";
-        private const string MaxBytesPerReadKey = "MaxBytesPerRead";
-        private const string MaxNameTableCharCountKey = "MaxNameTableCharCount";
-
-        private readonly string m_Namespace;
-
-        static NetTcpConfig()
-        {
-            if (!typeof(T).IsInterface)
-            {
-                throw new Exception("Only interfaces are allowed");
-            }
-        }
+        protected const string PortKey = "Port";
+        protected const string ServicePrincipalNameKey = "ServicePrincipalName";
+        protected const string TransactionFlowKey = "TransactionFlow";
+        protected const string InactivityTimeoutKey = "InactivityTimeout";
+        protected const string MaxBufferSizeKey = "MaxBufferSize";
+        protected const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
+        protected const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
 
         public NetTcpConfig(string @namespace)
+            : base(@namespace)
         {
-            if (@namespace == null)
-            {
-                throw new ArgumentNullException("namespace");
-            }
-            Contract.EndContractBlock();
-
-            m_Namespace = @namespace;
-        }
-
-        private string ServiceName
-        {
-            get { return typeof(T).Name; }
         }
 
         private int DefaultPort
@@ -78,46 +46,6 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get { return GetTimeout(InactivityTimeoutKey, DefaultInactivityTimeout); }
         }
 
-        private string DefaultSendTimeout
-        {
-            get { return ConfigHelper.GetAppSetting(SendTimeoutKey, "00:01:00"); }
-        }
-
-        private TimeSpan SendTimeout
-        {
-            get { return GetTimeout(SendTimeoutKey, DefaultSendTimeout); }
-        }
-
-        private string DefaultReceiveTimeout
-        {
-            get { return ConfigHelper.GetAppSetting(ReceiveTimeoutKey, "00:10:00"); }
-        }
-
-        private TimeSpan ReceiveTimeout
-        {
-            get { return GetTimeout(ReceiveTimeoutKey, DefaultReceiveTimeout); }
-        }
-
-        private string DefaultOpenTimeout
-        {
-            get { return ConfigHelper.GetAppSetting(OpenTimeoutKey, "00:01:00"); }
-        }
-
-        private TimeSpan OpenTimeout
-        {
-            get { return GetTimeout(OpenTimeoutKey, DefaultOpenTimeout); }
-        }
-
-        private string DefaultCloseTimeout
-        {
-            get { return ConfigHelper.GetAppSetting(CloseTimeoutKey, "00:01:00"); }
-        }
-
-        private TimeSpan CloseTimeout
-        {
-            get { return GetTimeout(CloseTimeoutKey, DefaultCloseTimeout); }
-        }
-
         private int DefaultMaxBufferSize
         {
             get { return GetAppSetting(MaxBufferSizeKey, 65536); }
@@ -126,90 +54,6 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         private int MaxBufferSize
         {
             get { return GetAppSetting(MaxBufferSizeKey, DefaultMaxBufferSize); }
-        }
-
-        private int DefaultMaxBufferPoolSize
-        {
-            get { return GetAppSetting(MaxBufferPoolSizeKey, 512 * 1024); }
-        }
-
-        private int MaxBufferPoolSize
-        {
-            get { return GetAppSetting(MaxBufferPoolSizeKey, DefaultMaxBufferPoolSize); }
-        }
-
-        private int DefaultMaxReceivedMessageSize
-        {
-            get { return GetAppSetting(MaxReceivedMessageSizeKey, 65536); }
-        }
-
-        private int MaxReceivedMessageSize
-        {
-            get { return GetAppSetting(MaxReceivedMessageSizeKey, DefaultMaxReceivedMessageSize); }
-        }
-
-        private int DefaultMaxArrayLength
-        {
-            get { return GetAppSetting(MaxArrayLengthKey, 16384); }
-        }
-
-        private int MaxArrayLength
-        {
-            get { return GetAppSetting(MaxArrayLengthKey, DefaultMaxArrayLength); }
-        }
-
-        private int DefaultMaxDepth
-        {
-            get { return GetAppSetting(MaxDepthKey, 32); }
-        }
-
-        private int MaxDepth
-        {
-            get { return GetAppSetting(MaxDepthKey, DefaultMaxDepth); }
-        }
-
-        private int DefaultMaxStringContentLength
-        {
-            get { return GetAppSetting(MaxStringContentLengthKey, 8192); }
-        }
-
-        private int MaxStringContentLength
-        {
-            get { return GetAppSetting(MaxStringContentLengthKey, DefaultMaxStringContentLength); }
-        }
-
-        private int DefaultMaxBytesPerRead
-        {
-            get { return GetAppSetting(MaxBytesPerReadKey, 4096); }
-        }
-
-        private int MaxBytesPerRead
-        {
-            get { return GetAppSetting(MaxBytesPerReadKey, DefaultMaxBytesPerRead); }
-        }
-
-        private int DefaultMaxNameTableCharCount
-        {
-            get { return GetAppSetting(MaxNameTableCharCountKey, 16384); }
-        }
-
-        private int MaxNameTableCharCount
-        {
-            get { return GetAppSetting(MaxNameTableCharCountKey, DefaultMaxNameTableCharCount); }
-        }
-
-        private string DefaultHost
-        {
-            get { return ConfigHelper.GetAppSetting(HostKey, "localhost"); }
-        }
-
-        private string Host
-        {
-            get
-            {
-                string host = GetAppSetting<string>(HostKey, null);
-                return string.IsNullOrWhiteSpace(host) ? DefaultHost : host;
-            }
         }
 
         private string ServicePrincipalName
@@ -227,17 +71,56 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get { return GetAppSetting(TransactionFlowKey, DefaultTransactionFlow); }
         }
 
-        private string BaseAddress
+        protected virtual int DefaultMaxBufferPoolSize
+        {
+            get { return GetAppSetting(MaxBufferPoolSizeKey, 512 * 1024); }
+        }
+
+        protected virtual int MaxBufferPoolSize
+        {
+            get { return GetAppSetting(MaxBufferPoolSizeKey, DefaultMaxBufferPoolSize); }
+        }
+
+        protected virtual int DefaultMaxReceivedMessageSize
+        {
+            get { return GetAppSetting(MaxReceivedMessageSizeKey, 65536); }
+        }
+
+        protected virtual int MaxReceivedMessageSize
+        {
+            get { return GetAppSetting(MaxReceivedMessageSizeKey, DefaultMaxReceivedMessageSize); }
+        }
+
+        public virtual string BaseAddress
         {
             get { return string.Format(@"net.tcp://{0}:{1}/{2}", Host, Port, Namespace); }
         }
 
-        private string Address
+        public virtual string Address
         {
             get { return string.Format("{0}/{1}", BaseAddress, ServiceName); }
         }
 
-        private Binding Binding
+        protected virtual NetTcpSecurity Security
+        {
+            get
+            {
+                TcpTransportSecurity tcpTransportSecurity =
+                    new TcpTransportSecurity
+                    {
+                        ClientCredentialType = TcpClientCredentialType.Windows,
+                        ProtectionLevel = ProtectionLevel.EncryptAndSign
+                    };
+
+                return new NetTcpSecurity
+                       {
+                           Mode = SecurityMode.Transport,
+                           Transport = tcpTransportSecurity
+                       };
+            }
+        }
+
+        protected virtual Binding Binding
         {
             get
             {
@@ -247,20 +130,6 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                         Enabled = true,
                         InactivityTimeout = InactivityTimeout,
                         Ordered = true
-                    };
-
-                TcpTransportSecurity tcpTransportSecurity =
-                    new TcpTransportSecurity
-                    {
-                        ClientCredentialType = TcpClientCredentialType.Windows,
-                        ProtectionLevel = ProtectionLevel.EncryptAndSign
-                    };
-
-                NetTcpSecurity security =
-                    new NetTcpSecurity
-                    {
-                        Mode = SecurityMode.Transport,
-                        Transport = tcpTransportSecurity
                     };
 
                 XmlDictionaryReaderQuotas readerQuotas =
@@ -276,9 +145,10 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                 return
                     new NetTcpBinding
                     {
-                        Namespace = string.Format(@"http://{0}/{1}", Namespace, ServiceName),
+                        Name = ServiceName,
+                        Namespace = string.Format(@"http://{0}", Namespace),
                         ReliableSession = optionalReliableSession,
-                        Security = security,
+                        Security = Security,
                         SendTimeout = SendTimeout,
                         ReceiveTimeout = ReceiveTimeout,
                         OpenTimeout = OpenTimeout,
@@ -292,29 +162,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             }
         }
 
-        private string Namespace
-        {
-            get { return m_Namespace; }
-        }
-
-        private TValue GetAppSetting<TValue>(string key, TValue defaultValue)
-            where TValue : IConvertible
-        {
-            return ConfigHelper.GetAppSetting(string.Concat(ServiceName, "_", key), defaultValue);
-        }
-
-        private TimeSpan GetTimeout(string key, string defaultTimeout)
-        {
-            string timeSpanAsString = ConfigHelper.GetAppSetting(string.Concat(ServiceName, "_", key), defaultTimeout);
-            TimeSpan timeSpan;
-            if (!TimeSpan.TryParse(timeSpanAsString, out timeSpan))
-            {
-                timeSpan = TimeSpan.Parse(defaultTimeout);
-            }
-            return timeSpan;
-        }
-
-        public IWcfClientModel GetClientModel(params object[] extensions)
+        public override IWcfClientModel GetClientModel(params object[] extensions)
         {
             Uri uri = new Uri(Address, UriKind.Absolute);
 
@@ -334,7 +182,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             return new DefaultClientModel(endpoint);
         }
 
-        public IWcfServiceModel GetServiceModel(params object[] extensions)
+        public override IWcfServiceModel GetServiceModel(params object[] extensions)
         {
             IWcfEndpoint endpoint =
                 WcfEndpoint
