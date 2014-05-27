@@ -26,54 +26,54 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         {
         }
 
-        private int DefaultPort
+        protected virtual int DefaultPort
         {
             get { return ConfigHelper.GetAppSetting<int>(PortKey); }
         }
 
-        private int Port
+        protected virtual int Port
         {
             get { return GetAppSetting(PortKey, DefaultPort); }
         }
 
-        private string DefaultInactivityTimeout
+        protected virtual string DefaultInactivityTimeout
         {
             get { return ConfigHelper.GetAppSetting(InactivityTimeoutKey, "00:10:00"); }
         }
 
-        private TimeSpan InactivityTimeout
+        protected virtual TimeSpan InactivityTimeout
         {
             get { return GetTimeout(InactivityTimeoutKey, DefaultInactivityTimeout); }
         }
 
-        private int DefaultMaxBufferSize
+        protected virtual int DefaultMaxBufferSize
         {
-            get { return GetAppSetting(MaxBufferSizeKey, 65536); }
+            get { return ConfigHelper.GetAppSetting(MaxBufferSizeKey, 65536); }
         }
 
-        private int MaxBufferSize
+        protected virtual int MaxBufferSize
         {
             get { return GetAppSetting(MaxBufferSizeKey, DefaultMaxBufferSize); }
         }
 
-        private string ServicePrincipalName
+        protected virtual string ServicePrincipalName
         {
             get { return GetAppSetting(ServicePrincipalNameKey, (string)null); }
         }
 
-        private bool DefaultTransactionFlow
+        protected virtual bool DefaultTransactionFlow
         {
             get { return ConfigHelper.GetAppSetting(TransactionFlowKey, false); }
         }
 
-        private bool TransactionFlow
+        protected virtual bool TransactionFlow
         {
             get { return GetAppSetting(TransactionFlowKey, DefaultTransactionFlow); }
         }
 
         protected virtual int DefaultMaxBufferPoolSize
         {
-            get { return GetAppSetting(MaxBufferPoolSizeKey, 512 * 1024); }
+            get { return ConfigHelper.GetAppSetting(MaxBufferPoolSizeKey, 512 * 1024); }
         }
 
         protected virtual int MaxBufferPoolSize
@@ -83,7 +83,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxReceivedMessageSize
         {
-            get { return GetAppSetting(MaxReceivedMessageSizeKey, 65536); }
+            get { return ConfigHelper.GetAppSetting(MaxReceivedMessageSizeKey, 65536); }
         }
 
         protected virtual int MaxReceivedMessageSize

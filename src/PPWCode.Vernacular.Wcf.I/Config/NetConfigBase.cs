@@ -178,6 +178,11 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             return timeSpan;
         }
 
+        protected TimeSpan GetTimeout(string key, TimeSpan defaultTimeout)
+        {
+            return GetTimeout(key, defaultTimeout.ToString());
+        }
+
         public abstract IWcfClientModel GetClientModel(params object[] extensions);
         public abstract IWcfServiceModel GetServiceModel(params object[] extensions);
     }

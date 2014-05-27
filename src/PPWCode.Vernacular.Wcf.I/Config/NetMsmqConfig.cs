@@ -19,8 +19,13 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected const string ExactlyOnceKey = "ExactlyOnce";
         protected const string MaxRetryCyclesKey = "MaxRetryCycles";
         protected const string RetryCycleDelayKey = "RetryCycleDelay";
+        protected const string ReceiveRetryCountKey = "ReceiveRetryCount";
+        protected const string ReceiveErrorHandlingKey = "ReceiveErrorHandling";
         protected const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
         protected const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
+        protected const string DeadLetterQueueKey = "DeadLetterQueue";
+        protected const string CustomDeadLetterQueueKey = "CustomDeadLetterQueue";
+        protected const string TimeToLiveKey = "TimeToLive";
 
         private readonly bool m_IsPrivate;
 
@@ -30,14 +35,9 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             m_IsPrivate = isPrivate;
         }
 
-        protected virtual string QueueName
-        {
-            get { return GetAppSetting(QueueNameKey, "QueueName"); }
-        }
-
         protected virtual bool DefaultDurable
         {
-            get { return GetAppSetting(DurableKey, true); }
+            get { return ConfigHelper.GetAppSetting(DurableKey, true); }
         }
 
         protected virtual bool Durable
@@ -47,7 +47,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual bool DefaultExactlyOnce
         {
-            get { return GetAppSetting(ExactlyOnceKey, true); }
+            get { return ConfigHelper.GetAppSetting(ExactlyOnceKey, true); }
         }
 
         protected virtual bool ExactlyOnce
@@ -57,7 +57,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxRetryCycles
         {
-            get { return GetAppSetting(MaxRetryCyclesKey, 2); }
+            get { return ConfigHelper.GetAppSetting(MaxRetryCyclesKey, 2); }
         }
 
         protected virtual int MaxRetryCycles
@@ -75,9 +75,33 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get { return GetTimeout(RetryCycleDelayKey, DefaultRetryCycleDelay); }
         }
 
+        protected virtual int DefaultReceiveRetryCount
+        {
+            get { return ConfigHelper.GetAppSetting(ReceiveRetryCountKey, 5); }
+        }
+
+        protected virtual int ReceiveRetryCount
+        {
+            get { return GetAppSetting(ReceiveRetryCountKey, DefaultReceiveRetryCount); }
+        }
+
+        protected virtual string DefaultReceiveErrorHandling
+        {
+            get { return ConfigHelper.GetAppSetting(ReceiveErrorHandlingKey, "Fault"); }
+        }
+
+        protected virtual ReceiveErrorHandling ReceiveErrorHandling
+        {
+            get
+            {
+                string result = GetAppSetting(ReceiveErrorHandlingKey, DefaultReceiveErrorHandling);
+                return (ReceiveErrorHandling)Enum.Parse(typeof(ReceiveErrorHandling), result);
+            }
+        }
+
         protected virtual int DefaultMaxBufferPoolSize
         {
-            get { return GetAppSetting(MaxBufferPoolSizeKey, 8); }
+            get { return ConfigHelper.GetAppSetting(MaxBufferPoolSizeKey, 8); }
         }
 
         protected virtual int MaxBufferPoolSize
@@ -87,12 +111,55 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxReceivedMessageSize
         {
-            get { return GetAppSetting(MaxReceivedMessageSizeKey, 65536); }
+            get { return ConfigHelper.GetAppSetting(MaxReceivedMessageSizeKey, 65536); }
         }
 
         protected virtual int MaxReceivedMessageSize
         {
             get { return GetAppSetting(MaxReceivedMessageSizeKey, DefaultMaxReceivedMessageSize); }
+        }
+
+        protected virtual string DefaultDeadLetterQueue
+        {
+            get { return ConfigHelper.GetAppSetting(DeadLetterQueueKey, ExactlyOnce ? "System" : "None"); }
+        }
+
+        protected virtual DeadLetterQueue DeadLetterQueue
+        {
+            get
+            {
+                string result = GetAppSetting(DeadLetterQueueKey, DefaultDeadLetterQueue);
+                return (DeadLetterQueue)Enum.Parse(typeof(DeadLetterQueue), result);
+            }
+        }
+
+        protected virtual string DefaultCustomDeadLetterQueue
+        {
+            get { return ConfigHelper.GetAppSetting<string>(CustomDeadLetterQueueKey); }
+        }
+
+        protected virtual Uri CustomDeadLetterQueue
+        {
+            get
+            {
+                string result = GetAppSetting(CustomDeadLetterQueueKey, DefaultCustomDeadLetterQueue);
+                return result != null ? new Uri(result, UriKind.Absolute) : null;
+            }
+        }
+
+        protected virtual string DefaultTimeToLive
+        {
+            get { return ConfigHelper.GetAppSetting(TimeToLiveKey, "1.00:00:00"); }
+        }
+
+        protected virtual TimeSpan TimeToLive
+        {
+            get { return GetTimeout(TimeToLiveKey, DefaultTimeToLive); }
+        }
+
+        public virtual string QueueName
+        {
+            get { return GetAppSetting(QueueNameKey, "QueueName"); }
         }
 
         public virtual string Address
@@ -145,7 +212,12 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                            ExactlyOnce = ExactlyOnce,
                            MaxReceivedMessageSize = MaxReceivedMessageSize,
                            MaxRetryCycles = MaxRetryCycles,
+                           ReceiveRetryCount = ReceiveRetryCount,
                            RetryCycleDelay = RetryCycleDelay,
+                           DeadLetterQueue = DeadLetterQueue,
+                           ReceiveErrorHandling = ReceiveErrorHandling,
+                           CustomDeadLetterQueue = CustomDeadLetterQueue,
+                           TimeToLive = TimeToLive
                        };
             }
         }
