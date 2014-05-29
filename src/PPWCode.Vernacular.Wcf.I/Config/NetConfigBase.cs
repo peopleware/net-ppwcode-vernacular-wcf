@@ -11,7 +11,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
     public abstract class NetConfigBase<T>
         where T : class
     {
-        private const string HostKey = "Host";
+        protected const string HostKey = "Host";
 
         // Binding timeout properties
         protected const string OpenTimeoutKey = "OpenTimeout";
