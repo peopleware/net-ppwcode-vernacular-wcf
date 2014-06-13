@@ -152,7 +152,10 @@
     <Compile Include="Config\NetMsmqConfig.cs" />
     <Compile Include="Config\NetTcpConfig.cs" />
     <Compile Include="ErrorHandlers\ExceptionLogbookEntry.cs" />
+    <Compile Include="ErrorHandlers\ExceptionMarshallingBehaviorAttribute.cs" />
+    <Compile Include="ErrorHandlers\ExceptionMarshallingElement.cs" />
     <Compile Include="ErrorHandlers\ExceptionMarshallingErrorHandler.cs" />
+    <Compile Include="ErrorHandlers\ExceptionMarshallingMessageInspector.cs" />
     <Compile Include="ErrorHandlers\LogErrorHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WcfDto.cs" />
