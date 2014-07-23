@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.ServiceModel;
+
 using PPWCode.Util.OddsAndEnds.II.ConfigHelper;
 
 namespace PPWCode.Vernacular.Wcf.I.Config
@@ -32,6 +34,15 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected override sealed string Protocol
         {
             get { return "http"; }
+        }
+
+        protected override HttpBindingBase CreateHttpBinding()
+        {
+            return
+                new BasicHttpBinding
+                {
+                    Security = new BasicHttpSecurity()
+                };
         }
     }
 }

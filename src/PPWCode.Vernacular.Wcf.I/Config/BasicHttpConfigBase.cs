@@ -26,6 +26,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         where T : class
     {
         protected const string PortKey = "Port";
+        protected const string ProtocolKey = "Protocol";
         protected const string MaxBufferSizeKey = "MaxBufferSize";
         protected const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
         protected const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
@@ -37,6 +38,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected abstract int DefaultPort { get; }
         protected abstract string Protocol { get; }
+        protected abstract HttpBindingBase CreateHttpBinding();
 
         protected virtual int Port
         {
@@ -83,30 +85,23 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get { return GetAppSetting(MaxReceivedMessageSizeKey, DefaultMaxReceivedMessageSize); }
         }
 
-        protected virtual BasicHttpSecurity Security
-        {
-            get { return new BasicHttpSecurity(); }
-        }
-
         public virtual Binding Binding
         {
             get
             {
-                return
-                    new BasicHttpBinding
-                    {
-                        AllowCookies = false,
-                        BypassProxyOnLocal = false,
-                        Security = Security,
-                        SendTimeout = SendTimeout,
-                        ReceiveTimeout = ReceiveTimeout,
-                        OpenTimeout = OpenTimeout,
-                        CloseTimeout = CloseTimeout,
-                        MaxBufferSize = MaxBufferSize,
-                        MaxBufferPoolSize = MaxBufferPoolSize,
-                        MaxReceivedMessageSize = MaxReceivedMessageSize,
-                        ReaderQuotas = ReaderQuotas
-                    };
+                HttpBindingBase binding = CreateHttpBinding();
+                binding.AllowCookies = false;
+                binding.BypassProxyOnLocal = false;
+                binding.SendTimeout = SendTimeout;
+                binding.ReceiveTimeout = ReceiveTimeout;
+                binding.OpenTimeout = OpenTimeout;
+                binding.CloseTimeout = CloseTimeout;
+                binding.MaxBufferSize = MaxBufferSize;
+                binding.MaxBufferPoolSize = MaxBufferPoolSize;
+                binding.MaxReceivedMessageSize = MaxReceivedMessageSize;
+                binding.ReaderQuotas = ReaderQuotas;
+
+                return binding;
             }
         }
 
