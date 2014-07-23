@@ -14,6 +14,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
 
 using Castle.Facilities.WcfIntegration;
 
@@ -197,6 +198,22 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected TimeSpan GetTimeout(string key, TimeSpan defaultTimeout)
         {
             return GetTimeout(key, defaultTimeout.ToString());
+        }
+
+        protected virtual XmlDictionaryReaderQuotas ReaderQuotas
+        {
+            get
+            {
+                return
+                    new XmlDictionaryReaderQuotas
+                    {
+                        MaxArrayLength = MaxArrayLength,
+                        MaxDepth = MaxDepth,
+                        MaxStringContentLength = MaxStringContentLength,
+                        MaxBytesPerRead = MaxBytesPerRead,
+                        MaxNameTableCharCount = MaxNameTableCharCount
+                    };
+            }
         }
 
         public abstract IWcfClientModel GetClientModel(params object[] extensions);

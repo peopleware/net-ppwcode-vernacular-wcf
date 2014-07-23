@@ -15,7 +15,6 @@
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Xml;
 
 using Castle.Facilities.WcfIntegration;
 
@@ -197,20 +196,10 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             }
         }
 
-        protected virtual Binding Binding
+        public virtual Binding Binding
         {
             get
             {
-                XmlDictionaryReaderQuotas readerQuotas =
-                    new XmlDictionaryReaderQuotas
-                    {
-                        MaxArrayLength = MaxArrayLength,
-                        MaxDepth = MaxDepth,
-                        MaxStringContentLength = MaxStringContentLength,
-                        MaxBytesPerRead = MaxBytesPerRead,
-                        MaxNameTableCharCount = MaxNameTableCharCount
-                    };
-
                 return new NetMsmqBinding
                        {
                            Name = ServiceName,
@@ -221,7 +210,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                            OpenTimeout = OpenTimeout,
                            CloseTimeout = CloseTimeout,
                            MaxBufferPoolSize = MaxBufferPoolSize,
-                           ReaderQuotas = readerQuotas,
+                           ReaderQuotas = ReaderQuotas,
                            Durable = Durable,
                            ExactlyOnce = ExactlyOnce,
                            MaxReceivedMessageSize = MaxReceivedMessageSize,
