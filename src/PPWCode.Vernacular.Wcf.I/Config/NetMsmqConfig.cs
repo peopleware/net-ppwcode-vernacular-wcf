@@ -234,7 +234,17 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                     .At(Address)
                     .AddExtensions(extensions);
 
-            return new DefaultClientModel(endpoint);
+            DefaultClientModel clientModel = new DefaultClientModel(endpoint);
+            if (OpenOnDemand)
+            {
+                clientModel.OpenOnDemand();
+            }
+            if (!AsyncCapability)
+            {
+                clientModel.WithoutAsyncCapability();
+            }
+
+            return clientModel;
         }
 
         public override IWcfServiceModel GetServiceModel(params object[] extensions)

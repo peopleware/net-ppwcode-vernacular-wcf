@@ -27,6 +27,8 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         where T : class
     {
         protected const string HostKey = "Host";
+        protected const string OpenOnDemandKey = "OpenOnDemand";
+        public const string AsyncCapabilityKey = "AsyncCapability";
 
         // Binding timeout properties
         protected const string OpenTimeoutKey = "OpenTimeout";
@@ -53,12 +55,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected NetConfigBase(string @namespace)
         {
-            if (@namespace == null)
-            {
-                throw new ArgumentNullException("namespace");
-            }
-
-            Contract.EndContractBlock();
+            Contract.Requires(@namespace != null);
 
             m_Namespace = @namespace;
         }
@@ -71,6 +68,26 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected virtual string ServiceName
         {
             get { return typeof(T).Name; }
+        }
+
+        protected virtual bool DefaultOpenOnDemand
+        {
+            get { return ConfigHelper.GetAppSetting(OpenOnDemandKey, true); }
+        }
+
+        protected virtual bool OpenOnDemand
+        {
+            get { return GetAppSetting(OpenOnDemandKey, DefaultOpenOnDemand); }
+        }
+
+        protected virtual bool DefaultAsyncCapability
+        {
+            get { return ConfigHelper.GetAppSetting(AsyncCapabilityKey, true); }
+        }
+
+        protected virtual bool AsyncCapability
+        {
+            get { return GetAppSetting(AsyncCapabilityKey, DefaultAsyncCapability); }
         }
 
         protected virtual string DefaultHost
