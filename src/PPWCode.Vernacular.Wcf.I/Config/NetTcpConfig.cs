@@ -193,6 +193,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             {
                 clientModel.OpenOnDemand();
             }
+
             if (!AsyncCapability)
             {
                 clientModel.WithoutAsyncCapability();

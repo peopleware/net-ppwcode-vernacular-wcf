@@ -37,7 +37,9 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         }
 
         protected abstract int DefaultPort { get; }
+
         protected abstract string Protocol { get; }
+
         protected abstract HttpBindingBase CreateHttpBinding();
 
         protected virtual int Port
@@ -128,6 +130,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             {
                 clientModel.OpenOnDemand();
             }
+
             if (!AsyncCapability)
             {
                 clientModel.WithoutAsyncCapability();
