@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Net.Security;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
@@ -23,40 +22,39 @@ using PPWCode.Util.OddsAndEnds.II.ConfigHelper;
 
 namespace PPWCode.Vernacular.Wcf.I.Config
 {
-    public class NetTcpConfig<T> : NetConfigBase<T>
+    public abstract class BasicHttpConfigBase<T> : NetConfigBase<T>
         where T : class
     {
         protected const string PortKey = "Port";
-        protected const string ServicePrincipalNameKey = "ServicePrincipalName";
-        protected const string TransactionFlowKey = "TransactionFlow";
-        protected const string InactivityTimeoutKey = "InactivityTimeout";
+        protected const string ProtocolKey = "Protocol";
         protected const string MaxBufferSizeKey = "MaxBufferSize";
         protected const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
         protected const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
 
-        public NetTcpConfig(string @namespace)
+        protected BasicHttpConfigBase(string @namespace)
             : base(@namespace)
         {
         }
 
-        protected virtual int DefaultPort
-        {
-            get { return ConfigHelper.GetAppSetting<int>(PortKey); }
-        }
+        protected abstract int DefaultPort { get; }
+
+        protected abstract string Protocol { get; }
+
+        protected abstract HttpBindingBase CreateHttpBinding();
 
         protected virtual int Port
         {
             get { return GetAppSetting(PortKey, DefaultPort); }
         }
 
-        protected virtual string DefaultInactivityTimeout
+        public virtual string BaseAddress
         {
-            get { return ConfigHelper.GetAppSetting(InactivityTimeoutKey, "00:10:00"); }
+            get { return string.Format(@"{0}://{1}:{2}/{3}", Protocol, Host, Port, Namespace); }
         }
 
-        protected virtual TimeSpan InactivityTimeout
+        public virtual string Address
         {
-            get { return GetTimeout(InactivityTimeoutKey, DefaultInactivityTimeout); }
+            get { return string.Format("{0}/{1}", BaseAddress, ServiceName); }
         }
 
         protected virtual int DefaultMaxBufferSize
@@ -67,21 +65,6 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected virtual int MaxBufferSize
         {
             get { return GetAppSetting(MaxBufferSizeKey, DefaultMaxBufferSize); }
-        }
-
-        protected virtual string ServicePrincipalName
-        {
-            get { return GetAppSetting(ServicePrincipalNameKey, (string)null); }
-        }
-
-        protected virtual bool DefaultTransactionFlow
-        {
-            get { return ConfigHelper.GetAppSetting(TransactionFlowKey, false); }
-        }
-
-        protected virtual bool TransactionFlow
-        {
-            get { return GetAppSetting(TransactionFlowKey, DefaultTransactionFlow); }
         }
 
         protected virtual int DefaultMaxBufferPoolSize
@@ -104,64 +87,23 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get { return GetAppSetting(MaxReceivedMessageSizeKey, DefaultMaxReceivedMessageSize); }
         }
 
-        public virtual string BaseAddress
-        {
-            get { return string.Format(@"net.tcp://{0}:{1}/{2}", Host, Port, Namespace); }
-        }
-
-        public virtual string Address
-        {
-            get { return string.Format("{0}/{1}", BaseAddress, ServiceName); }
-        }
-
-        protected virtual NetTcpSecurity Security
-        {
-            get
-            {
-                TcpTransportSecurity tcpTransportSecurity =
-                    new TcpTransportSecurity
-                    {
-                        ClientCredentialType = TcpClientCredentialType.Windows,
-                        ProtectionLevel = ProtectionLevel.EncryptAndSign
-                    };
-
-                return new NetTcpSecurity
-                       {
-                           Mode = SecurityMode.Transport,
-                           Transport = tcpTransportSecurity
-                       };
-            }
-        }
-
         public virtual Binding Binding
         {
             get
             {
-                OptionalReliableSession optionalReliableSession =
-                    new OptionalReliableSession
-                    {
-                        Enabled = true,
-                        InactivityTimeout = InactivityTimeout,
-                        Ordered = true
-                    };
+                HttpBindingBase binding = CreateHttpBinding();
+                binding.AllowCookies = false;
+                binding.BypassProxyOnLocal = false;
+                binding.SendTimeout = SendTimeout;
+                binding.ReceiveTimeout = ReceiveTimeout;
+                binding.OpenTimeout = OpenTimeout;
+                binding.CloseTimeout = CloseTimeout;
+                binding.MaxBufferSize = MaxBufferSize;
+                binding.MaxBufferPoolSize = MaxBufferPoolSize;
+                binding.MaxReceivedMessageSize = MaxReceivedMessageSize;
+                binding.ReaderQuotas = ReaderQuotas;
 
-                return
-                    new NetTcpBinding
-                    {
-                        Name = ServiceName,
-                        Namespace = string.Format(@"http://{0}", Namespace),
-                        ReliableSession = optionalReliableSession,
-                        Security = Security,
-                        SendTimeout = SendTimeout,
-                        ReceiveTimeout = ReceiveTimeout,
-                        OpenTimeout = OpenTimeout,
-                        CloseTimeout = CloseTimeout,
-                        TransactionFlow = TransactionFlow,
-                        MaxBufferSize = MaxBufferSize,
-                        MaxBufferPoolSize = MaxBufferPoolSize,
-                        MaxReceivedMessageSize = MaxReceivedMessageSize,
-                        ReaderQuotas = ReaderQuotas
-                    };
+                return binding;
             }
         }
 
@@ -170,12 +112,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get
             {
                 Uri uri = new Uri(Address, UriKind.Absolute);
-
-                EndpointIdentity identity =
-                    string.IsNullOrWhiteSpace(ServicePrincipalName)
-                        ? null
-                        : new SpnEndpointIdentity(ServicePrincipalName);
-                return new EndpointAddress(uri, identity);
+                return new EndpointAddress(uri);
             }
         }
 

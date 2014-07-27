@@ -147,10 +147,15 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Behaviors\AllowedImpersonationLevelAuthorization.cs" />
+    <Compile Include="Behaviors\ServiceThrottlingAttribute.cs" />
     <Compile Include="Behaviors\PrincipalPermissionModeAuthorization.cs" />
+    <Compile Include="Config\BasicHttpConfigBase.cs" />
+    <Compile Include="Config\HttpBindingConfig.cs" />
+    <Compile Include="Config\HttpsBindingConfig.cs" />
     <Compile Include="Config\NetConfigBase.cs" />
     <Compile Include="Config\NetMsmqConfig.cs" />
     <Compile Include="Config\NetTcpConfig.cs" />
+    <Compile Include="Config\WcfConstants.cs" />
     <Compile Include="ErrorHandlers\ExceptionLogbookEntry.cs" />
     <Compile Include="ErrorHandlers\ExceptionMarshallingBehaviorAttribute.cs" />
     <Compile Include="ErrorHandlers\ExceptionMarshallingElement.cs" />
