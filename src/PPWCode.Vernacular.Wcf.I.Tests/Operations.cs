@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics.Contracts;
-using System.Globalization;
+using System.Collections.Generic;
 using System.ServiceModel;
-
-using Castle.Core.Logging;
 
 namespace PPWCode.Vernacular.Wcf.I.Tests
 {
@@ -29,26 +26,14 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
 
     public class Operations : IOperations
     {
-        private readonly ILogger m_Logger;
-
         private int m_Value;
 
-        public Operations(ILogger logger)
-        {
-            Contract.Requires(logger != null);
-
-            m_Logger = logger;
-        }
-
-        protected ILogger Logger
-        {
-            get { return m_Logger; }
-        }
+        public static readonly IList<int> s_GetIntResults = new List<int>();
 
         public int GetInt()
         {
             int result = ++m_Value;
-            Logger.Info(result.ToString(CultureInfo.InvariantCulture));
+            s_GetIntResults.Add(result);
             return result;
         }
     }

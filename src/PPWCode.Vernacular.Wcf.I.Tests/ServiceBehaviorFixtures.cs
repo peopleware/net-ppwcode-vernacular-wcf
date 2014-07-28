@@ -24,7 +24,6 @@ using Castle.Windsor;
 
 using log4net.Appender;
 using log4net.Config;
-using log4net.Core;
 
 using NUnit.Framework;
 
@@ -72,11 +71,10 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                                 maxConcurrentSessions = 2,
                                 maxConcurrentInstances = 3
                             })
-                        .LifestyleSingleton()
                         .Attribute(WcfConstants.ExtensionScopeKey).Eq(WcfExtensionScope.Services),
                     Component.For<IOperations>()
                         .ImplementedBy<Operations>()
-                        .LifestylePerWcfOperation()
+                        .LifeStyle.Transient
                         .AsWcfService(
                             new DefaultServiceModel()
                                 .AddEndpoints(WcfEndpoint
@@ -100,11 +98,10 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                 container.Register(
                     Component.For<PrincipalPermissionModeAuthorization>()
                         .DependsOn(new { principalPermissionMode = PrincipalPermissionMode.Custom })
-                        .LifestyleSingleton()
                         .Attribute(WcfConstants.ExtensionScopeKey).Eq(WcfExtensionScope.Services),
                     Component.For<IOperations>()
                         .ImplementedBy<Operations>()
-                        .LifestylePerWcfOperation()
+                        .LifeStyle.Transient
                         .AsWcfService(
                             new DefaultServiceModel()
                                 .AddEndpoints(WcfEndpoint
@@ -126,11 +123,10 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                 container.Register(
                     Component.For<ServiceBehavior4IOperations2>()
                         .Named("serviceBehaviorIOperations2")
-                        .LifestyleSingleton()
                         .Attribute(WcfConstants.ExtensionScopeKey).Eq(WcfExtensionScope.Explicit),
                     Component.For<IOperations>()
                         .ImplementedBy<Operations>()
-                        .LifestylePerWcfOperation()
+                        .LifeStyle.Transient
                         .AsWcfService(
                             new DefaultServiceModel()
                                 .AddEndpoints(WcfEndpoint
@@ -138,7 +134,7 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                                                   .At("net.tcp://localhost/Operations"))),
                     Component.For<IOperations2>()
                         .ImplementedBy<Operations2>()
-                        .LifestylePerWcfOperation()
+                        .LifeStyle.Transient
                         .AsWcfService(
                             new DefaultServiceModel()
                                 .AddEndpoints(WcfEndpoint
@@ -161,16 +157,10 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                         new EndpointAddress("net.tcp://localhost/Operations"));
 
                     client.GetInt();
-                    LoggingEvent[] events = m_MemoryAppender.GetEvents();
-                    Assert.AreEqual(1, events.Length);
-                    Assert.IsTrue(events.All(e => Convert.ToInt32(e.MessageObject) == 1));
-                    m_MemoryAppender.Clear();
-
                     client.GetInt();
-                    events = m_MemoryAppender.GetEvents();
-                    Assert.AreEqual(1, events.Length);
-                    Assert.IsTrue(events.All(e => Convert.ToInt32(e.MessageObject) == 2));
-                    m_MemoryAppender.Clear();
+                    Assert.AreEqual(2, Operations.s_GetIntResults.Count);
+                    Assert.AreEqual(1, Operations.s_GetIntResults[0]);
+                    Assert.AreEqual(2, Operations.s_GetIntResults[1]);
                 }
 
                 // IOperations2 is PerCall
@@ -186,9 +176,8 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                         new EndpointAddress("net.tcp://localhost/Operations2"));
                     client.GetInt();
                     client.GetInt();
-                    LoggingEvent[] events = m_MemoryAppender.GetEvents();
-                    Assert.AreEqual(2, events.Length);
-                    Assert.IsTrue(events.All(e => Convert.ToInt32(e.MessageObject) == 1));
+                    Assert.AreEqual(2, Operations2.s_GetIntResults.Count);
+                    Assert.IsTrue(Operations2.s_GetIntResults.All(r => r == 1));
                 }
             }
         }
