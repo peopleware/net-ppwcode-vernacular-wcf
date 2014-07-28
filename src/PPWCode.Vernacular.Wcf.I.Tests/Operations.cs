@@ -15,6 +15,8 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 
+using PPWCode.Vernacular.Exceptions.II;
+
 namespace PPWCode.Vernacular.Wcf.I.Tests
 {
     [ServiceContract]
@@ -22,6 +24,12 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
     {
         [OperationContract]
         int GetInt();
+
+        [OperationContract]
+        void ThrowSemanticException();
+
+        [OperationContract]
+        void ThrowNonSerializableException();
     }
 
     public class Operations : IOperations
@@ -35,6 +43,25 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
             int result = ++m_Value;
             s_GetIntResults.Add(result);
             return result;
+        }
+
+        public void ThrowSemanticException()
+        {
+            throw new SemanticException("Throw semantic exception");
+        }
+
+        public void ThrowNonSerializableException()
+        {
+            throw new NonSerializableException("Throw non serializable exception");
+        }
+    }
+
+    public class NonSerializableException : SemanticException
+    {
+        /// <ensures csharp="this.Message == message" vb="Me.Message = message ">this.Message == message</ensures>
+        public NonSerializableException(string message)
+            : base(message)
+        {
         }
     }
 }

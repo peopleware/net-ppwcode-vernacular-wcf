@@ -12,18 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 
-using Castle.Facilities.Logging;
 using Castle.Facilities.WcfIntegration;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-
-using log4net.Appender;
-using log4net.Config;
 
 using NUnit.Framework;
 
@@ -34,29 +29,8 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]
-    public class ServiceBehaviorFixtures
+    public class ServiceBehaviorFixtures : BaseFixtures
     {
-        private MemoryAppender m_MemoryAppender;
-
-        private IWindsorContainer Container
-        {
-            get
-            {
-                WindsorContainer container = new WindsorContainer();
-                container.AddFacility<WcfFacility>(
-                    f =>
-                    {
-                        f.CloseTimeout = TimeSpan.Zero;
-                        f.Services.OpenServiceHostsEagerly = true;
-                    });
-                LoggingFacility logging = new LoggingFacility(LoggerImplementation.ExtendedLog4net);
-                container.AddFacility(logging);
-                m_MemoryAppender = new MemoryAppender();
-                BasicConfigurator.Configure(m_MemoryAppender);
-                return container;
-            }
-        }
-
         [Test]
         public void Can_Apply_Throttling()
         {
@@ -146,39 +120,31 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
 
                 // IOperations is PerSession
                 // Check on behavior + check nr. instances created
-                {
-                    ServiceHost host = wcfFacility.Services.ManagedServiceHosts.Single(h => h.Description.Endpoints.Any(e => e.Contract.ContractType == typeof(IOperations)));
-                    ServiceBehaviorAttribute serviceBehavior = host.Description.Behaviors.OfType<ServiceBehaviorAttribute>().SingleOrDefault();
-                    Assert.IsNotNull(serviceBehavior);
-                    Assert.AreEqual(InstanceContextMode.PerSession, serviceBehavior.InstanceContextMode);
+                ServiceHost host = wcfFacility.Services.ManagedServiceHosts.Single(h => h.Description.Endpoints.Any(e => e.Contract.ContractType == typeof(IOperations)));
+                ServiceBehaviorAttribute serviceBehavior = host.Description.Behaviors.OfType<ServiceBehaviorAttribute>().SingleOrDefault();
+                Assert.IsNotNull(serviceBehavior);
+                Assert.AreEqual(InstanceContextMode.PerSession, serviceBehavior.InstanceContextMode);
 
-                    IOperations client = ChannelFactory<IOperations>.CreateChannel(
-                        new NetTcpBinding { PortSharingEnabled = true },
-                        new EndpointAddress("net.tcp://localhost/Operations"));
+                IOperations client = GetClient();
 
-                    client.GetInt();
-                    client.GetInt();
-                    Assert.AreEqual(2, Operations.s_GetIntResults.Count);
-                    Assert.AreEqual(1, Operations.s_GetIntResults[0]);
-                    Assert.AreEqual(2, Operations.s_GetIntResults[1]);
-                }
+                client.GetInt();
+                client.GetInt();
+                Assert.AreEqual(2, Operations.s_GetIntResults.Count);
+                Assert.AreEqual(1, Operations.s_GetIntResults[0]);
+                Assert.AreEqual(2, Operations.s_GetIntResults[1]);
 
                 // IOperations2 is PerCall
                 // Check on behavior + check nr. instances created
-                {
-                    ServiceHost host = wcfFacility.Services.ManagedServiceHosts.Single(h => h.Description.Endpoints.Any(e => e.Contract.ContractType == typeof(IOperations2)));
-                    ServiceBehaviorAttribute serviceBehavior = host.Description.Behaviors.OfType<ServiceBehaviorAttribute>().SingleOrDefault();
-                    Assert.IsNotNull(serviceBehavior);
-                    Assert.AreEqual(InstanceContextMode.PerCall, serviceBehavior.InstanceContextMode);
+                ServiceHost host2 = wcfFacility.Services.ManagedServiceHosts.Single(h => h.Description.Endpoints.Any(e => e.Contract.ContractType == typeof(IOperations2)));
+                ServiceBehaviorAttribute serviceBehavior2 = host2.Description.Behaviors.OfType<ServiceBehaviorAttribute>().SingleOrDefault();
+                Assert.IsNotNull(serviceBehavior2);
+                Assert.AreEqual(InstanceContextMode.PerCall, serviceBehavior2.InstanceContextMode);
 
-                    IOperations2 client = ChannelFactory<IOperations2>.CreateChannel(
-                        new NetTcpBinding { PortSharingEnabled = true },
-                        new EndpointAddress("net.tcp://localhost/Operations2"));
-                    client.GetInt();
-                    client.GetInt();
-                    Assert.AreEqual(2, Operations2.s_GetIntResults.Count);
-                    Assert.IsTrue(Operations2.s_GetIntResults.All(r => r == 1));
-                }
+                IOperations2 client2 = GetClient2();
+                client2.GetInt();
+                client2.GetInt();
+                Assert.AreEqual(2, Operations2.s_GetIntResults.Count);
+                Assert.IsTrue(Operations2.s_GetIntResults.All(r => r == 1));
             }
         }
 
