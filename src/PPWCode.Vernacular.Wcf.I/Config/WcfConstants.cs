@@ -17,7 +17,8 @@ namespace PPWCode.Vernacular.Wcf.I.Config
     public static class WcfConstants
     {
         /// <summary>
-        ///     Duplicates Castle.Facilities.WcfIntegration.WcfConstants.ExtensionScopeKey because it is internal defined.
+        ///     Duplicates the <see cref="ExtensionScopeKey" /> property on
+        ///     <see cref="Castle.Facilities.WcfIntegration.WcfConstants" /> because it is internal defined.
         /// </summary>
         public const string ExtensionScopeKey = "scope";
     }
