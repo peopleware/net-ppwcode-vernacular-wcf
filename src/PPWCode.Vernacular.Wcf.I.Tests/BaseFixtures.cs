@@ -34,11 +34,7 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
             {
                 WindsorContainer container = new WindsorContainer();
                 container.AddFacility<WcfFacility>(
-                    f =>
-                    {
-                        f.CloseTimeout = TimeSpan.Zero;
-                        f.Services.OpenServiceHostsEagerly = true;
-                    });
+                    f => { f.CloseTimeout = TimeSpan.Zero; });
                 LoggingFacility logging = new LoggingFacility(LoggerImplementation.ExtendedLog4net);
                 container.AddFacility(logging);
                 m_MemoryAppender = new MemoryAppender();

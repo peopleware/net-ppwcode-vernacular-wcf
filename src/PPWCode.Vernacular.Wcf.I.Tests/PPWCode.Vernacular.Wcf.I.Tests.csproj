@@ -113,7 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseFixtures.cs" />
+    <Compile Include="EndPointNotFoundFixtures.cs" />
     <Compile Include="ExceptionMarshallingFixtures.cs" />
+    <Compile Include="MessageSizeFixtures.cs" />
     <Compile Include="Operations.cs" />
     <Compile Include="Operations2.cs" />
     <Compile Include="ServiceBehaviorFixtures.cs" />

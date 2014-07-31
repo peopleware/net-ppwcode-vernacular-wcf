@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.ServiceModel;
 
 using PPWCode.Vernacular.Exceptions.II;
@@ -24,6 +25,9 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
     {
         [OperationContract]
         int GetInt();
+
+        [OperationContract]
+        byte[] GetByteArrayInt(long size);
 
         [OperationContract]
         void ThrowSemanticException();
@@ -42,6 +46,18 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
         {
             int result = ++m_Value;
             s_GetIntResults.Add(result);
+            return result;
+        }
+
+        public byte[] GetByteArrayInt(long size)
+        {
+            Contract.Requires(size >= 0);
+
+            byte[] result = new byte[size];
+            for (int i = 0; i < size; i++)
+            {
+                result[i] = (byte)(i % 256);
+            }
             return result;
         }
 

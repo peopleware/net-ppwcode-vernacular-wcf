@@ -126,6 +126,7 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                 Assert.AreEqual(InstanceContextMode.PerSession, serviceBehavior.InstanceContextMode);
 
                 IOperations client = GetClient();
+                Operations.s_GetIntResults.Clear();
 
                 client.GetInt();
                 client.GetInt();
@@ -141,6 +142,8 @@ namespace PPWCode.Vernacular.Wcf.I.Tests
                 Assert.AreEqual(InstanceContextMode.PerCall, serviceBehavior2.InstanceContextMode);
 
                 IOperations2 client2 = GetClient2();
+                Operations2.s_GetIntResults.Clear();
+
                 client2.GetInt();
                 client2.GetInt();
                 Assert.AreEqual(2, Operations2.s_GetIntResults.Count);
