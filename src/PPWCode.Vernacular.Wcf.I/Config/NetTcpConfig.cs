@@ -27,11 +27,21 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         where T : class
     {
         protected const string PortKey = "Port";
+
         protected const string ServicePrincipalNameKey = "ServicePrincipalName";
+
+        protected const string UserPrincipalNameKey = "UserPrincipalName";
+
+        protected const string DnsKey = "Dns";
+
         protected const string TransactionFlowKey = "TransactionFlow";
+
         protected const string InactivityTimeoutKey = "InactivityTimeout";
+
         protected const string MaxBufferSizeKey = "MaxBufferSize";
+
         protected const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
+
         protected const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
 
         public NetTcpConfig(string @namespace)
@@ -72,6 +82,16 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected virtual string ServicePrincipalName
         {
             get { return GetAppSetting(ServicePrincipalNameKey, (string)null); }
+        }
+
+        protected virtual string UserPrincipalName
+        {
+            get { return GetAppSetting(UserPrincipalNameKey, (string)null); }
+        }
+
+        protected virtual string Dns
+        {
+            get { return GetAppSetting(DnsKey, (string)null); }
         }
 
         protected virtual bool DefaultTransactionFlow
@@ -171,11 +191,23 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             {
                 Uri uri = new Uri(Address, UriKind.Absolute);
 
-                EndpointIdentity identity =
-                    string.IsNullOrWhiteSpace(ServicePrincipalName)
-                        ? null
-                        : new SpnEndpointIdentity(ServicePrincipalName);
-                return new EndpointAddress(uri, identity);
+                EndpointIdentity identity = null;
+                if (!string.IsNullOrWhiteSpace(ServicePrincipalName))
+                {
+                    identity = EndpointIdentity.CreateSpnIdentity(ServicePrincipalName);
+                }
+                else if (!string.IsNullOrWhiteSpace(UserPrincipalName))
+                {
+                    identity = EndpointIdentity.CreateUpnIdentity(UserPrincipalName);
+                }
+                else if (!string.IsNullOrWhiteSpace(Dns))
+                {
+                    identity = EndpointIdentity.CreateDnsIdentity(Dns);
+                }
+
+                return identity != null
+                           ? new EndpointAddress(uri, identity)
+                           : new EndpointAddress(uri);
             }
         }
 
