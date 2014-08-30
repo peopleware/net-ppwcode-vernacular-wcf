@@ -19,26 +19,22 @@ using Castle.Facilities.WcfIntegration;
 
 namespace PPWCode.Vernacular.Wcf.I.Behaviors
 {
-    public class PrincipalPermissionModeAuthorization : AbstractServiceHostAware
+    public abstract class ConfigureServiceBehavior<T> : AbstractServiceHostAware
+        where T : class, IServiceBehavior, new()
     {
-        private readonly PrincipalPermissionMode m_PrincipalPermissionMode;
-
-        public PrincipalPermissionModeAuthorization(PrincipalPermissionMode principalPermissionMode)
-        {
-            m_PrincipalPermissionMode = principalPermissionMode;
-        }
-
         protected override void Opening(ServiceHost serviceHost)
         {
-            ServiceAuthorizationBehavior authorization = EnsureServiceBehavior<ServiceAuthorizationBehavior>(serviceHost);
-            authorization.PrincipalPermissionMode = m_PrincipalPermissionMode;
+            base.Opening(serviceHost);
+
+            T serviceBehavior = EnsureServiceBehavior(serviceHost);
+            Configure(serviceBehavior);
         }
 
-        private static T EnsureServiceBehavior<T>(ServiceHost serviceHost)
-            where T : class, IServiceBehavior, new()
+        protected abstract void Configure(T serviceBehavior);
+
+        private T EnsureServiceBehavior(ServiceHost serviceHost)
         {
             T behavior = serviceHost.Description.Behaviors.Find<T>();
-
             if (behavior == null)
             {
                 behavior = new T();
