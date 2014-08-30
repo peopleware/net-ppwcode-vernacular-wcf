@@ -27,20 +27,29 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         where T : class
     {
         protected const string HostKey = "Host";
+
         protected const string OpenOnDemandKey = "OpenOnDemand";
+
         public const string AsyncCapabilityKey = "AsyncCapability";
 
         // Binding timeout properties
         protected const string OpenTimeoutKey = "OpenTimeout";
+
         protected const string CloseTimeoutKey = "CloseTimeout";
+
         protected const string SendTimeoutKey = "SendTimeout";
+
         protected const string ReceiveTimeoutKey = "ReceiveTimeout";
 
         // ReaderQuotas
         protected const string MaxArrayLengthKey = "MaxArrayLength";
+
         protected const string MaxDepthKey = "MaxDepth";
+
         protected const string MaxStringContentLengthKey = "MaxStringContentLength";
+
         protected const string MaxBytesPerReadKey = "MaxBytesPerRead";
+
         protected const string MaxNameTableCharCountKey = "MaxNameTableCharCount";
 
         private readonly string m_Namespace;
@@ -68,6 +77,11 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected virtual string ServiceName
         {
             get { return typeof(T).Name; }
+        }
+
+        protected virtual string FullServiceName
+        {
+            get { return typeof(T).FullName; }
         }
 
         protected virtual bool DefaultOpenOnDemand
@@ -197,12 +211,18 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected TValue GetAppSetting<TValue>(string key, TValue defaultValue)
             where TValue : IConvertible
         {
-            return ConfigHelper.GetAppSetting(string.Concat(ServiceName, "_", key), defaultValue);
+            return
+                ConfigHelper.GetAppSetting(
+                    string.Concat(FullServiceName, "_", key),
+                    ConfigHelper.GetAppSetting(string.Concat(ServiceName, "_", key), defaultValue));
         }
 
         protected TimeSpan GetTimeout(string key, string defaultTimeout)
         {
-            string timeSpanAsString = ConfigHelper.GetAppSetting(string.Concat(ServiceName, "_", key), defaultTimeout);
+            string timeSpanAsString =
+                ConfigHelper.GetAppSetting(
+                    string.Concat(FullServiceName, "_", key),
+                    ConfigHelper.GetAppSetting(string.Concat(ServiceName, "_", key), defaultTimeout));
             TimeSpan timeSpan;
             if (!TimeSpan.TryParse(timeSpanAsString, out timeSpan))
             {
