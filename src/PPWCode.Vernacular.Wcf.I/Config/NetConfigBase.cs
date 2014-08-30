@@ -146,7 +146,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxArrayLength
         {
-            get { return GetAppSetting(MaxArrayLengthKey, 16384); }
+            get { return ConfigHelper.GetAppSetting(MaxArrayLengthKey, 16384); }
         }
 
         protected virtual int MaxArrayLength
@@ -156,7 +156,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxDepth
         {
-            get { return GetAppSetting(MaxDepthKey, 32); }
+            get { return ConfigHelper.GetAppSetting(MaxDepthKey, 32); }
         }
 
         protected virtual int MaxDepth
@@ -166,7 +166,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxStringContentLength
         {
-            get { return GetAppSetting(MaxStringContentLengthKey, 8192); }
+            get { return ConfigHelper.GetAppSetting(MaxStringContentLengthKey, 8192); }
         }
 
         protected virtual int MaxStringContentLength
@@ -176,7 +176,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxBytesPerRead
         {
-            get { return GetAppSetting(MaxBytesPerReadKey, 4096); }
+            get { return ConfigHelper.GetAppSetting(MaxBytesPerReadKey, 4096); }
         }
 
         protected virtual int MaxBytesPerRead
@@ -186,7 +186,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         protected virtual int DefaultMaxNameTableCharCount
         {
-            get { return GetAppSetting(MaxNameTableCharCountKey, 16384); }
+            get { return ConfigHelper.GetAppSetting(MaxNameTableCharCountKey, 16384); }
         }
 
         protected virtual int MaxNameTableCharCount
