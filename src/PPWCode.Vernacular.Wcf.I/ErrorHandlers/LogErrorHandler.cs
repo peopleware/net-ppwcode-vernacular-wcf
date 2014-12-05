@@ -63,14 +63,21 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
 
             string assemblyName = typeName = methodName = "Unknown";
 
-            if (error.TargetSite != null)
+            try
             {
-                assemblyName = error.TargetSite.Module.Assembly.GetName().Name;
-                methodName = error.TargetSite.Name;
-                if (error.TargetSite.DeclaringType != null)
+                if (error.TargetSite != null)
                 {
-                    typeName = error.TargetSite.DeclaringType.Name;
+                    assemblyName = error.TargetSite.Module.Assembly.GetName().Name;
+                    methodName = error.TargetSite.Name;
+                    if (error.TargetSite.DeclaringType != null)
+                    {
+                        typeName = error.TargetSite.DeclaringType.Name;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                assemblyName = "Could not reflect assembly name.";
             }
 
             string fileName = GetFileName(error);
