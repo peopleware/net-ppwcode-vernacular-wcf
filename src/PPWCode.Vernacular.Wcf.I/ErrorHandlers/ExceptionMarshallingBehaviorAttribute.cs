@@ -85,7 +85,7 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
             // Don't add a message inspector if it already exists
             if (!runtime.MessageInspectors.OfType<ExceptionMarshallingMessageInspector>().Any())
             {
-            runtime.MessageInspectors.Add(new ExceptionMarshallingMessageInspector());
+                runtime.MessageInspectors.Add(new ExceptionMarshallingMessageInspector());
             }
         }
 
@@ -94,7 +94,7 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
             // Don't add an error handler if it already exists
             if (!dispatcher.ErrorHandlers.OfType<ExceptionMarshallingErrorHandler>().Any())
             {
-            dispatcher.ErrorHandlers.Add(new ExceptionMarshallingErrorHandler());
+                dispatcher.ErrorHandlers.Add(new ExceptionMarshallingErrorHandler());
             }
         }
     }
