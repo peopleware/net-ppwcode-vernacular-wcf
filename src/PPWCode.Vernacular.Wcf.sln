@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Wcf.I", "I\PPWCode.Vernacular.Wcf.I.csproj", "{EEFF9C98-F5C1-417B-AB58-4369EC9C07FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{34D81F32-475B-44EA-9B21-43F16B65C348}"
+	ProjectSection(SolutionItems) = preProject
+		I\PPWCode.Vernacular.Wcf.I.nuspec = I\PPWCode.Vernacular.Wcf.I.nuspec
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psake", "psake", "{15F52E3F-4424-428D-B948-11DA84A36DDC}"
 	ProjectSection(SolutionItems) = preProject
