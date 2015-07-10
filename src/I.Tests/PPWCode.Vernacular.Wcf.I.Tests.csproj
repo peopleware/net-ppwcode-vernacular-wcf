@@ -171,7 +171,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PPWCode.Vernacular.Wcf.I\PPWCode.Vernacular.Wcf.I.csproj">
+    <ProjectReference Include="..\I\PPWCode.Vernacular.Wcf.I.csproj">
       <Project>{eeff9c98-f5c1-417b-ab58-4369ec9c07fa}</Project>
       <Name>PPWCode.Vernacular.Wcf.I</Name>
     </ProjectReference>
