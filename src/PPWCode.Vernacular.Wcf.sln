@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Wcf.I", "I\PPWCode.Vernacular.Wcf.I.csproj", "{EEFF9C98-F5C1-417B-AB58-4369EC9C07FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{34D81F32-475B-44EA-9B21-43F16B65C348}"
+	ProjectSection(SolutionItems) = preProject
+		I\PPWCode.Vernacular.Wcf.I.nuspec = I\PPWCode.Vernacular.Wcf.I.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psake", "psake", "{15F52E3F-4424-428D-B948-11DA84A36DDC}"
+	ProjectSection(SolutionItems) = preProject
+		..\default.ps1 = ..\default.ps1
+		..\init-psake.ps1 = ..\init-psake.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0926B134-3AAA-4FEE-8691-2925B1AE805E}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPWCode.Vernacular.Wcf.I.Tests", "I.Tests\PPWCode.Vernacular.Wcf.I.Tests.csproj", "{9BAB0425-73C6-4C4C-AE1F-3EC9824DAC9F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEFF9C98-F5C1-417B-AB58-4369EC9C07FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEFF9C98-F5C1-417B-AB58-4369EC9C07FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEFF9C98-F5C1-417B-AB58-4369EC9C07FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEFF9C98-F5C1-417B-AB58-4369EC9C07FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BAB0425-73C6-4C4C-AE1F-3EC9824DAC9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BAB0425-73C6-4C4C-AE1F-3EC9824DAC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BAB0425-73C6-4C4C-AE1F-3EC9824DAC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BAB0425-73C6-4C4C-AE1F-3EC9824DAC9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
