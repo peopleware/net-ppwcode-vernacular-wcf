@@ -1,4 +1,4 @@
-﻿// Copyright 2014 by PeopleWare n.v..
+﻿// Copyright 2016 by PeopleWare n.v..
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,15 +29,25 @@ namespace PPWCode.Vernacular.Wcf.I.Config
 
         // Specific msmq binding propteries
         protected const string DurableKey = "Durable";
+
         protected const string ExactlyOnceKey = "ExactlyOnce";
+
         protected const string MaxRetryCyclesKey = "MaxRetryCycles";
+
         protected const string RetryCycleDelayKey = "RetryCycleDelay";
+
         protected const string ReceiveRetryCountKey = "ReceiveRetryCount";
+
         protected const string ReceiveErrorHandlingKey = "ReceiveErrorHandling";
+
         protected const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
+
         protected const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
+
         protected const string DeadLetterQueueKey = "DeadLetterQueue";
+
         protected const string CustomDeadLetterQueueKey = "CustomDeadLetterQueue";
+
         protected const string TimeToLiveKey = "TimeToLive";
 
         private readonly bool m_IsPrivate;
@@ -225,7 +235,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             }
         }
 
-        public override IWcfClientModel GetClientModel(params object[] extensions)
+        protected override DefaultClientModel CreateDefaultClientModel(params object[] extensions)
         {
             IWcfEndpoint endpoint =
                 WcfEndpoint
@@ -235,20 +245,11 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                     .AddExtensions(extensions);
 
             DefaultClientModel clientModel = new DefaultClientModel(endpoint);
-            if (OpenOnDemand)
-            {
-                clientModel.OpenOnDemand();
-            }
-
-            if (!AsyncCapability)
-            {
-                clientModel.WithoutAsyncCapability();
-            }
 
             return clientModel;
         }
 
-        public override IWcfServiceModel GetServiceModel(params object[] extensions)
+        protected override DefaultServiceModel CreateDefaultServiceModel(params object[] extensions)
         {
             IWcfEndpoint endpoint =
                 WcfEndpoint

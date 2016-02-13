@@ -1,4 +1,4 @@
-﻿// Copyright 2014 by PeopleWare n.v..
+﻿// Copyright 2016 by PeopleWare n.v..
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -253,8 +253,30 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             }
         }
 
-        public abstract IWcfClientModel GetClientModel(params object[] extensions);
+        public virtual IWcfClientModel GetClientModel(params object[] extensions)
+        {
+            DefaultClientModel clientModel = CreateDefaultClientModel(extensions);
 
-        public abstract IWcfServiceModel GetServiceModel(params object[] extensions);
+            if (OpenOnDemand)
+            {
+                clientModel.OpenOnDemand();
+            }
+
+            if (!AsyncCapability)
+            {
+                clientModel.WithoutAsyncCapability();
+            }
+
+            return clientModel;
+        }
+
+        public virtual IWcfServiceModel GetServiceModel(params object[] extensions)
+        {
+            return CreateDefaultServiceModel(extensions);
+        }
+
+        protected abstract DefaultServiceModel CreateDefaultServiceModel(object[] extensions);
+
+        protected abstract DefaultClientModel CreateDefaultClientModel(object[] extensions);
     }
 }
