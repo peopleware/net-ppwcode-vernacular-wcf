@@ -1,4 +1,4 @@
-﻿// Copyright 2014 by PeopleWare n.v..
+﻿// Copyright 2016 by PeopleWare n.v..
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,6 +43,8 @@ namespace PPWCode.Vernacular.Wcf.I.Config
         protected const string MaxBufferPoolSizeKey = "MaxBufferPoolSize";
 
         protected const string MaxReceivedMessageSizeKey = "MaxReceivedMessageSize";
+
+        protected const string PortSharingEnabledKey = "PortSharingEnabled";
 
         public NetTcpConfig(string @namespace)
             : base(@namespace)
@@ -124,6 +126,16 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             get { return GetAppSetting(MaxReceivedMessageSizeKey, DefaultMaxReceivedMessageSize); }
         }
 
+        protected virtual bool DefaultPortSharingEnabled
+        {
+            get { return ConfigHelper.GetAppSetting(PortSharingEnabledKey, false); }
+        }
+
+        protected virtual bool PortSharingEnabled
+        {
+            get { return GetAppSetting(PortSharingEnabledKey, DefaultPortSharingEnabled); }
+        }
+
         public virtual string BaseAddress
         {
             get { return string.Format(@"net.tcp://{0}:{1}/{2}", Host, Port, Namespace); }
@@ -180,7 +192,8 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                         MaxBufferSize = MaxBufferSize,
                         MaxBufferPoolSize = MaxBufferPoolSize,
                         MaxReceivedMessageSize = MaxReceivedMessageSize,
-                        ReaderQuotas = ReaderQuotas
+                        ReaderQuotas = ReaderQuotas,
+                        PortSharingEnabled = PortSharingEnabled
                     };
             }
         }
@@ -211,7 +224,7 @@ namespace PPWCode.Vernacular.Wcf.I.Config
             }
         }
 
-        public override IWcfClientModel GetClientModel(params object[] extensions)
+        protected override DefaultClientModel CreateDefaultClientModel(params object[] extensions)
         {
             IWcfEndpoint endpoint =
                 WcfEndpoint
@@ -221,20 +234,11 @@ namespace PPWCode.Vernacular.Wcf.I.Config
                     .AddExtensions(extensions);
 
             DefaultClientModel clientModel = new DefaultClientModel(endpoint);
-            if (OpenOnDemand)
-            {
-                clientModel.OpenOnDemand();
-            }
-
-            if (!AsyncCapability)
-            {
-                clientModel.WithoutAsyncCapability();
-            }
 
             return clientModel;
         }
 
-        public override IWcfServiceModel GetServiceModel(params object[] extensions)
+        protected override DefaultServiceModel CreateDefaultServiceModel(params object[] extensions)
         {
             IWcfEndpoint endpoint =
                 WcfEndpoint

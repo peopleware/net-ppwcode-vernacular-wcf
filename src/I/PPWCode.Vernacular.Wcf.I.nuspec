@@ -19,6 +19,7 @@
 1.0.0 Initial release PPWCode.Vernacular.Wcf.I, built against .NET 4.5.
 1.1.0 Add support on NetTcpConfig for UserPrincipalName and Dns identities
 1.1.1 Bug Fix (determine assemblyName in method CreateLogbookentry can throw FileNotFoundException)
+1.2.0 Give protected access to DefaultServiceModel and DefaultClientModel + introduce configurable parameter PortSharingEnabled (default:false)
     </releaseNotes>
 
     <copyright>Copyright 2014 by PeopleWare n.v.</copyright>
