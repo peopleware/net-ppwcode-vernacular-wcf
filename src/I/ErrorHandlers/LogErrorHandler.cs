@@ -136,7 +136,10 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
             }
             catch (FormatException)
             {
-                number = Convert.ToInt32(lineNumber);
+                if (!int.TryParse(lineNumber, out number))
+                {
+                    number = 0;
+                }
             }
 
             return number;
