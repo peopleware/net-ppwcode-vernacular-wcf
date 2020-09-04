@@ -20,6 +20,7 @@
 1.1.0 Add support on NetTcpConfig for UserPrincipalName and Dns identities
 1.1.1 Bug Fix (determine assemblyName in method CreateLogbookentry can throw FileNotFoundException)
 1.2.0 Give protected access to DefaultServiceModel and DefaultClientModel + introduce configurable parameter PortSharingEnabled (default:false)
+1.2.1 Catch exceptions that occur in LogErrorHandler
     </releaseNotes>
 
     <copyright>Copyright 2014 by PeopleWare n.v.</copyright>
