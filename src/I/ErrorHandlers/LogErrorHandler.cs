@@ -104,7 +104,7 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
                     providedFault = fault.Code.Name;
                 }
 
-                if (fault.Reason?.Translations != null && fault.Reason.Translations.Any())
+                if (fault.Reason != null && fault.Reason.Translations != null && fault.Reason.Translations.Any())
                 {
                     providedMessage = fault.Reason.Translations[0].Text;
                 }
