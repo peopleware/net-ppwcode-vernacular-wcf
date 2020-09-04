@@ -39,7 +39,17 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
 
         bool IErrorHandler.HandleError(Exception error)
         {
-            string message = CreateLogbookentry(error, null).ToString();
+            string message = string.Empty;
+
+            try
+            {
+                message = CreateLogbookentry(error, null).ToString();
+            }
+            catch (Exception e)
+            {
+                Logger.Error("An exception occurred while handling the error", e);
+            }
+
             if (error is SemanticException)
             {
                 Logger.Info(message, error);
@@ -89,8 +99,15 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
 
             if (fault != null)
             {
-                providedFault = fault.Code.Name;
-                providedMessage = fault.Reason.Translations[0].Text;
+                if (fault.Code != null)
+                {
+                    providedFault = fault.Code.Name;
+                }
+
+                if (fault.Reason != null && fault.Reason.Translations != null && fault.Reason.Translations.Any())
+                {
+                    providedMessage = fault.Reason.Translations[0].Text;
+                }
             }
 
             return new ExceptionLogbookEntry(assemblyName, fileName, lineNumber, typeName, methodName, exceptionName, exceptionMessage, providedFault, providedMessage);
@@ -136,7 +153,10 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
             }
             catch (FormatException)
             {
-                number = Convert.ToInt32(lineNumber);
+                if (!int.TryParse(lineNumber, out number))
+                {
+                    number = 0;
+                }
             }
 
             return number;
