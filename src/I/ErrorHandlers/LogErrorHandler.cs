@@ -39,7 +39,17 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
 
         bool IErrorHandler.HandleError(Exception error)
         {
-            string message = CreateLogbookentry(error, null).ToString();
+            string message = string.Empty;
+
+            try
+            {
+                message = CreateLogbookentry(error, null).ToString();
+            }
+            catch (Exception e)
+            {
+                Logger.Error("An exception occurred while handling the error", e);
+            }
+
             if (error is SemanticException)
             {
                 Logger.Info(message, error);
