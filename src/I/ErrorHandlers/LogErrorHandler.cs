@@ -89,8 +89,15 @@ namespace PPWCode.Vernacular.Wcf.I.ErrorHandlers
 
             if (fault != null)
             {
-                providedFault = fault.Code.Name;
-                providedMessage = fault.Reason.Translations[0].Text;
+                if (fault.Code != null)
+                {
+                    providedFault = fault.Code.Name;
+                }
+
+                if (fault.Reason?.Translations != null && fault.Reason.Translations.Any())
+                {
+                    providedMessage = fault.Reason.Translations[0].Text;
+                }
             }
 
             return new ExceptionLogbookEntry(assemblyName, fileName, lineNumber, typeName, methodName, exceptionName, exceptionMessage, providedFault, providedMessage);
